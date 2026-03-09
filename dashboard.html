@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحليل الرئيسية | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #9333ea;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+            --bg-main: linear-gradient(180deg, rgba(37, 99, 235, 0.06) 0%, transparent 30%, transparent 70%, rgba(147, 51, 234, 0.06) 100%), #f0f4f8;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+        
+        body.dark-mode {
+            --bg-main: linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, transparent 30%, transparent 70%, rgba(147, 51, 234, 0.08) 100%), #0a0f1a;
+            --card-bg: #020617;
+            --text-main: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --border-color: #1f2937;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: linear-gradient(rgba(37, 99, 235, 0.07) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 0;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 4px 35px rgba(37, 99, 235, 0.12);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode header {
+            background: rgba(15, 23, 42, 0.92);
+            border-bottom-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+            gap: 24px;
+        }
+
+        .logo {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            min-width: fit-content;
+        }
+
+        .logo:hover {
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-right: auto;
+        }
+
+        .back-btn {
+            padding: 10px 18px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateX(4px);
+            box-shadow: 0 6px 25px rgba(37, 99, 235, 0.35);
+            background: linear-gradient(135deg, #1d4ed8 0%, #7e22ce 100%);
+        }
+
+        .back-btn:active {
+            transform: translateX(2px) scale(0.98);
+        }
+
+        .theme-btn, .export-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-light);
+            background: var(--white);
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.15);
+        }
+
+        .theme-btn:hover, .export-btn:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .theme-btn:active, .export-btn:active {
+            transform: scale(1.05);
+        }
+
+        body.dark-mode .theme-btn, body.dark-mode .export-btn {
+            background: rgba(37, 99, 235, 0.15);
+            color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+
+        body.dark-mode .theme-btn:hover, body.dark-mode .export-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .dashboard-section {
+            padding: 120px 0 80px;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .section-title {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1.5px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .kpi-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .kpi-icon {
+            font-size: 2.2rem;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease 0.1s;
+            animation-fill-mode: both;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1.5px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .chart-card:hover {
+            box-shadow: 0 8px 40px rgba(37, 99, 235, 0.15);
+            border-color: var(--primary-light);
+            transform: translateY(-4px);
+        }
+
+        .chart-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            min-height: 120px;
+            resize: vertical;
+            color: var(--text-main);
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+        }
+
+        .modal-content textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .modal-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .modal-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .modal-btn:active {
+            transform: translateY(0);
+        }
+
+        .modal-btn-cancel {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .modal-btn-cancel:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .modal-btn-submit {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .modal-btn-submit:hover {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(147, 51, 234, 0.08) 100%);
+            border: 1.5px solid var(--primary-light);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+            border-color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.7rem;
+            color: var(--primary);
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .data-table thead {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 16px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .table-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1.5px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+            margin-bottom: 40px;
+            overflow-x: auto;
+            transition: all 0.3s ease;
+        }
+
+        .table-section:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 8px 40px rgba(37, 99, 235, 0.12);
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-section {
+                padding: 100px 0 60px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .kpi-card {
+                padding: 20px;
+            }
+            .charts-grid {
+                gap: 16px;
+            }
+            .chart-card {
+                padding: 16px;
+            }
+            .modal-content {
+                padding: 28px;
+                border-radius: 16px;
+            }
+            .modal-btns {
+                grid-template-columns: 1fr;
+            }
+            .header-content {
+                gap: 12px;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+            .back-btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-section {
+                padding: 90px 0 50px;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .kpi-icon {
+                font-size: 1.8rem;
+            }
+            .kpi-value {
+                font-size: 1.6rem;
+            }
+            .chart-container {
+                height: 250px;
+            }
+            .stat-value {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="analytics-assistant.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> رجوع
+                </a>
+                <a href="#" class="logo">
+                    <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+                    <span>لوحة التحليل</span>
+                </a>
+                <div class="header-actions">
+                    <button class="theme-btn" id="themeBtn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="export-btn" id="exportBtn">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">لوحة التحليل الرئيسية</h1>
+                <p class="section-subtitle">تحليل شامل وتفاعلي لبياناتك مع مؤشرات الأداء الرئيسية</p>
+            </div>
+
+            <div id="loadingState" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p style="margin-top: 16px;">جاري تحميل البيانات...</p>
+            </div>
+
+            <div id="questionModal" class="modal">
+                <div class="modal-content">
+                    <h2><i class="fas fa-question-circle"></i> ماذا تريد أن تعرفه من بياناتك؟</h2>
+                    <p>أخبرنا عن احتياجاتك وسنقوم بتحليل البيانات وفقاً لذلك</p>
+                    <textarea id="userNeed" placeholder="مثال: أريد أن أعرف المتوسط والأعلى والأقل..."></textarea>
+                    <div class="modal-btns">
+                        <button class="modal-btn modal-btn-cancel" onclick="skipQuestion()">تخطي</button>
+                        <button class="modal-btn modal-btn-submit" onclick="submitQuestion()">عرض التحليل</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kpiSection" style="display: none;">
+                <div class="kpi-grid" id="kpiGrid"></div>
+            </div>
+
+            <div id="chartsSection" style="display: none;">
+                <h2 class="section-title" style="margin-bottom: 24px;">الرسوم البيانية</h2>
+                <div class="charts-grid" id="chartsGrid"></div>
+            </div>
+
+            <div id="statsSection" style="display: none;">
+                <h2 class="section-title" style="margin-bottom: 24px;">الإحصائيات</h2>
+                <div class="stats-section">
+                    <div class="stats-grid" id="statsGrid"></div>
+                </div>
+            </div>
+
+            <div id="tableSection" style="display: none;">
+                <h2 class="section-title" style="margin-bottom: 24px;">البيانات الكاملة</h2>
+                <div class="table-section">
+                    <table class="data-table" id="dataTable">
+                        <thead><tr id="tableHeader"></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="noDataMessage" class="no-data" style="display: none;">
+                <i class="fas fa-file-upload"></i>
+                <h3>ابدأ بتحميل بياناتك</h3>
+                <p>لم يتم العثور على بيانات. اتبع الخطوات التالية:</p>
+                <div style="text-align: right; margin: 32px auto; background: rgba(37, 99, 235, 0.08); border: 2px solid var(--primary-light); border-radius: 15px; padding: 28px; max-width: 550px;">
+                    <ol style="color: var(--text-main); font-weight: 600; line-height: 2.2; text-align: right;">
+                        <li>اذهب إلى <a href="tools.html" style="color: var(--primary); font-weight: 700; text-decoration: underline;">صفحة الأدوات</a></li>
+                        <li>اختر ملفك (CSV, Excel, JSON)</li>
+                        <li>ارفع الملف</li>
+                        <li>اضغط "اذهب للـ Dashboard"</li>
+                        <li>سيعود التحليل تلقائياً</li>
+                    </ol>
+                </div>
+                <a href="tools.html"><i class="fas fa-arrow-right"></i> اذهب لرفع ملف</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const themeBtn = document.getElementById('themeBtn');
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        let dashboardData = [];
+        let userQuestions = '';
+
+        function loadDataFromURL() {
+            console.log('دالة loadDataFromURL بدأت التنفيذ');
+            
+            // محاولة قراءة البيانات من sessionStorage أولاً
+            let dashboardDataStr = sessionStorage.getItem('dashboardData');
+            
+            if (dashboardDataStr) {
+                console.log('✅ تم استرجاع البيانات من sessionStorage');
+                processDashboardData(dashboardDataStr);
+            } else {
+                // إذا لم تكن موجودة، اقرأ من IndexedDB
+                const dbRequest = indexedDB.open('dashboardDB', 1);
+                
+                dbRequest.onsuccess = (e) => {
+                    const db = e.target.result;
+                    const transaction = db.transaction(['data'], 'readonly');
+                    const store = transaction.objectStore('data');
+                    const getRequest = store.get('dashboardData');
+                    
+                    getRequest.onsuccess = () => {
+                        dashboardDataStr = getRequest.result;
+                        if (dashboardDataStr) {
+                            console.log('✅ تم استرجاع البيانات من IndexedDB');
+                            processDashboardData(dashboardDataStr);
+                        } else {
+                            console.log('❌ لا توجد بيانات');
+                            document.getElementById('noDataMessage').style.display = 'block';
+                        }
+                    };
+                };
+                
+                dbRequest.onerror = () => {
+                    console.error('خطأ في قراءة قاعدة البيانات');
+                    document.getElementById('noDataMessage').style.display = 'block';
+                };
+            }
+        }
+        
+        function processDashboardData(dashboardDataStr) {
+            try {
+                console.log('تحليل البيانات...');
+                dashboardData = JSON.parse(dashboardDataStr);
+                console.log('✅ عدد الصفوف:', dashboardData.length);
+                
+                if (dashboardData.length > 0) {
+                    // امسح البيانات بعد قراءتها
+                    sessionStorage.removeItem('dashboardData');
+                    const dbRequest = indexedDB.open('dashboardDB', 1);
+                    dbRequest.onsuccess = (e) => {
+                        const db = e.target.result;
+                        const transaction = db.transaction(['data'], 'readwrite');
+                        transaction.objectStore('data').delete('dashboardData');
+                    };
+                    
+                    document.getElementById('questionModal').classList.add('show');
+                } else {
+                    document.getElementById('noDataMessage').style.display = 'block';
+                }
+            } catch (err) {
+                console.error('❌ خطأ:', err);
+                document.getElementById('noDataMessage').style.display = 'block';
+            }
+        }
+
+        function submitQuestion() {
+            console.log('تم الضغط على "عرض التحليل"');
+            userQuestions = document.getElementById('userNeed').value;
+            console.log('السؤال:', userQuestions);
+            document.getElementById('questionModal').classList.remove('show');
+            renderDashboard(dashboardData);
+        }
+
+        function skipQuestion() {
+            console.log('تم الضغط على "تخطي"');
+            userQuestions = '';
+            document.getElementById('questionModal').classList.remove('show');
+            renderDashboard(dashboardData);
+        }
+
+        function renderDashboard(data) {
+            console.log('renderDashboard بدأ التنفيذ، عدد الصفوف:', data ? data.length : 0);
+            
+            if (!data || data.length === 0) {
+                console.log('لا توجد بيانات بواسطة renderDashboard');
+                document.getElementById('noDataMessage').style.display = 'block';
+                return;
+            }
+
+            console.log('عرض الأقسام...');
+            document.getElementById('kpiSection').style.display = 'block';
+            document.getElementById('chartsSection').style.display = 'block';
+            document.getElementById('statsSection').style.display = 'block';
+            document.getElementById('tableSection').style.display = 'block';
+
+            const columns = Object.keys(data[0]);
+            console.log('الأعمدة:', columns);
+            
+            // تحليل ذكي للبيانات
+            const analysis = analyzeData(data, columns);
+            console.log('تحليل البيانات:', analysis);
+            
+            const stats = calculateStatistics(data, analysis.numericColumns);
+            console.log('الإحصائيات:', stats);
+
+            renderKPI(data, columns, stats, analysis);
+            renderSmartCharts(data, analysis);
+            renderStatistics(stats, analysis);
+            renderTable(data, columns);
+            
+            console.log('تم الانتهاء من renderDashboard بنجاح');
+        }
+
+        // تحليل ذكي للبيانات
+        function analyzeData(data, columns) {
+            const analysis = {
+                numericColumns: [],
+                categoricalColumns: [],
+                dateColumns: [],
+                recommendations: []
+            };
+
+            columns.forEach(col => {
+                let numCount = 0, dateCount = 0, totalCount = 0;
+                const values = new Set();
+                
+                data.forEach(row => {
+                    const val = row[col];
+                    if (val === null || val === undefined || val === '') return;
+                    
+                    totalCount++;
+                    values.add(String(val).toLowerCase());
+                    
+                    // هل قيمة رقمية؟
+                    const num = parseFloat(val);
+                    if (!isNaN(num) && num !== '') numCount++;
+                    
+                    // هل تاريخ؟
+                    if (/^\d{4}-\d{2}-\d{2}|^\d{2}\/\d{2}\/\d{4}/.test(String(val))) dateCount++;
+                });
+
+                const numPercentage = totalCount > 0 ? (numCount / totalCount) * 100 : 0;
+                const uniqueRatio = values.size / totalCount;
+
+                if (numPercentage > 80) {
+                    analysis.numericColumns.push(col);
+                } else if (dateCount / totalCount > 0.8) {
+                    analysis.dateColumns.push(col);
+                } else if (uniqueRatio < 0.3 && values.size <= 20) {
+                    analysis.categoricalColumns.push(col);
+                }
+            });
+
+            // توصيات للرسوم البيانية
+            if (analysis.numericColumns.length >= 2) {
+                analysis.recommendations.push({
+                    type: 'scatter',
+                    columns: analysis.numericColumns.slice(0, 2),
+                    title: `علاقة بين ${analysis.numericColumns[0]} و ${analysis.numericColumns[1]}`
+                });
+            }
+
+            analysis.numericColumns.slice(0, 3).forEach(col => {
+                analysis.recommendations.push({
+                    type: 'bar',
+                    columns: [col],
+                    title: `توزيع ${col}`
+                });
+            });
+
+            if (analysis.categoricalColumns.length > 0 && analysis.numericColumns.length > 0) {
+                analysis.recommendations.push({
+                    type: 'bar',
+                    columns: [analysis.categoricalColumns[0], analysis.numericColumns[0]],
+                    title: `${analysis.numericColumns[0]} حسب ${analysis.categoricalColumns[0]}`
+                });
+            }
+
+            return analysis;
+        }
+
+        function getNumericColumns(data, columns) {
+            return columns.filter(col => {
+                for (let row of data) {
+                    const val = row[col];
+                    const num = parseFloat(val);
+                    if (!isNaN(num)) return true;
+                }
+                return false;
+            });
+        }
+
+        function calculateStatistics(data, numericColumns) {
+            const stats = {};
+            numericColumns.forEach(col => {
+                const values = data.map(d => {
+                    const num = parseFloat(d[col]);
+                    return isNaN(num) ? null : num;
+                }).filter(v => v !== null);
+
+                if (values.length > 0) {
+                    const sum = values.reduce((a, b) => a + b);
+                    const avg = sum / values.length;
+                    const sorted = [...values].sort((a, b) => a - b);
+                    const median = sorted.length % 2 === 0 
+                        ? (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2
+                        : sorted[Math.floor(sorted.length / 2)];
+                    
+                    const variance = values.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / values.length;
+                    const stdDev = Math.sqrt(variance);
+
+                    stats[col] = {
+                        average: formatNumber(avg),
+                        max: formatNumber(Math.max(...values)),
+                        min: formatNumber(Math.min(...values)),
+                        median: formatNumber(median),
+                        stdDev: formatNumber(stdDev),
+                        sum: formatNumber(sum),
+                        count: values.length,
+                        min_raw: Math.min(...values),
+                        max_raw: Math.max(...values)
+                    };
+                }
+            });
+            return stats;
+        }
+
+        // تنسيق الأرقام بشكل احترافي
+        function formatNumber(num) {
+            if (num === null || isNaN(num)) return '-';
+            
+            // إذا كان الرقم كبير جداً
+            if (Math.abs(num) >= 1000000) {
+                return (num / 1000000).toFixed(2) + 'M';
+            }
+            if (Math.abs(num) >= 1000) {
+                return (num / 1000).toFixed(2) + 'K';
+            }
+            
+            // تنسيق عادي
+            if (Number.isInteger(num)) return num.toString();
+            if (Math.abs(num) < 1) return num.toFixed(4);
+            return num.toFixed(2);
+        }
+
+        function renderKPI(data, columns, stats, analysis) {
+            let html = `
+                <div class="kpi-card">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-label">عدد الصفوف</div>
+                    <div class="kpi-value">${data.length.toLocaleString('ar')}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">📋</div>
+                    <div class="kpi-label">عدد الأعمدة</div>
+                    <div class="kpi-value">${columns.length}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🔢</div>
+                    <div class="kpi-label">أعمدة رقمية</div>
+                    <div class="kpi-value">${analysis.numericColumns.length}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🏷️</div>
+                    <div class="kpi-label">أعمدة تصنيفية</div>
+                    <div class="kpi-value">${analysis.categoricalColumns.length}</div>
+                </div>
+            `;
+            
+            // أضف أهم الإحصائيات
+            analysis.numericColumns.slice(0, 2).forEach(col => {
+                if (stats[col]) {
+                    html += `<div class="kpi-card">
+                        <div class="kpi-icon">📈</div>
+                        <div class="kpi-label">${col} (متوسط)</div>
+                        <div class="kpi-value" style="font-size: 1.5rem;">${stats[col].average}</div>
+                    </div>`;
+                }
+            });
+            
+            document.getElementById('kpiGrid').innerHTML = html;
+        }
+
+        // رسوم بيانية ذكية
+        function renderSmartCharts(data, analysis) {
+            let html = '';
+            let chartIndex = 0;
+
+            // مخطط الانتشار إذا كان هناك أعمدة رقمية
+            if (analysis.numericColumns.length >= 2) {
+                html += `<div class="chart-card">
+                    <div class="chart-title">🔗 العلاقات بين البيانات</div>
+                    <div class="chart-container"><canvas id="chart-${chartIndex}"></canvas></div>
+                </div>`;
+                chartIndex++;
+            }
+
+            // رسوم بيانية للأعمدة الرقمية الرئيسية
+            analysis.numericColumns.slice(0, 3).forEach(col => {
+                html += `<div class="chart-card">
+                    <div class="chart-title">📊 ${col}</div>
+                    <div class="chart-container"><canvas id="chart-${chartIndex}"></canvas></div>
+                </div>`;
+                chartIndex++;
+            });
+
+            // رسم بياني للبيانات التصنيفية
+            if (analysis.categoricalColumns.length > 0 && analysis.numericColumns.length > 0) {
+                html += `<div class="chart-card">
+                    <div class="chart-title">📂 توزيع ${analysis.categoricalColumns[0]}</div>
+                    <div class="chart-container"><canvas id="chart-${chartIndex}"></canvas></div>
+                </div>`;
+                chartIndex++;
+            }
+
+            document.getElementById('chartsGrid').innerHTML = html;
+
+            // رسم الرسوم البيانية
+            setTimeout(() => {
+                let index = 0;
+
+                // مخطط الانتشار
+                if (analysis.numericColumns.length >= 2) {
+                    const canvas = document.getElementById(`chart-${index}`);
+                    if (canvas) {
+                        drawScatterChart(canvas, data, analysis.numericColumns[0], analysis.numericColumns[1]);
+                    }
+                    index++;
+                }
+
+                // رسوم الخطوط للأعمدة الرقمية
+                analysis.numericColumns.slice(0, 3).forEach(col => {
+                    const canvas = document.getElementById(`chart-${index}`);
+                    if (canvas) {
+                        drawLineChart(canvas, data, col);
+                    }
+                    index++;
+                });
+
+                // رسم بياني عمودي للبيانات التصنيفية
+                if (analysis.categoricalColumns.length > 0 && analysis.numericColumns.length > 0) {
+                    const canvas = document.getElementById(`chart-${index}`);
+                    if (canvas) {
+                        drawGroupedChart(canvas, data, analysis.categoricalColumns[0], analysis.numericColumns[0]);
+                    }
+                }
+            }, 100);
+        }
+
+        // مخطط الانتشار
+        function drawScatterChart(canvas, data, xCol, yCol) {
+            const points = data.map(d => ({
+                x: parseFloat(d[xCol]) || 0,
+                y: parseFloat(d[yCol]) || 0
+            })).filter(p => !isNaN(p.x) && !isNaN(p.y)).slice(0, 100);
+
+            if (points.length === 0) return;
+
+            new Chart(canvas.getContext('2d'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: `${xCol} vs ${yCol}`,
+                        data: points,
+                        backgroundColor: 'rgba(37, 99, 235, 0.6)',
+                        borderColor: '#2563eb',
+                        borderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: document.body.classList.contains('dark-mode') ? '#e5e7eb' : '#0f172a' } }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: xCol, color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? 'rgba(59, 130, 246, 0.1)' : 'rgba(37, 99, 235, 0.1)' }
+                        },
+                        y: {
+                            title: { display: true, text: yCol, color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? 'rgba(59, 130, 246, 0.1)' : 'rgba(37, 99, 235, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // رسم بياني خطي محسّن
+        function drawLineChart(canvas, data, col) {
+            const values = data.map(d => parseFloat(d[col]) || 0);
+            const maxDataPoints = 50;
+            
+            let labels, chartData;
+            if (data.length > maxDataPoints) {
+                const step = Math.ceil(data.length / maxDataPoints);
+                labels = data.map((_, i) => (i % step === 0 ? i + 1 : '')).filter(Boolean);
+                chartData = values.filter((_, i) => i % step === 0);
+            } else {
+                labels = data.map((_, i) => i + 1);
+                chartData = values;
+            }
+
+            new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: col,
+                        data: chartData,
+                        borderColor: '#9333ea',
+                        backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#9333ea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: document.body.classList.contains('dark-mode') ? '#e5e7eb' : '#0f172a' } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? 'rgba(59, 130, 246, 0.1)' : 'rgba(37, 99, 235, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // رسم بياني عمودي مجمع
+        function drawGroupedChart(canvas, data, groupCol, valueCol) {
+            const groups = {};
+            
+            data.forEach(row => {
+                const group = String(row[groupCol]);
+                const value = parseFloat(row[valueCol]) || 0;
+                if (!groups[group]) groups[group] = [];
+                groups[group].push(value);
+            });
+
+            const labels = Object.keys(groups).slice(0, 15);
+            const averages = labels.map(group => {
+                const values = groups[group];
+                return values.reduce((a, b) => a + b, 0) / values.length;
+            });
+
+            new Chart(canvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `متوسط ${valueCol} في كل ${groupCol}`,
+                        data: averages,
+                        backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                        borderColor: '#2563eb',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: document.body.classList.contains('dark-mode') ? '#e5e7eb' : '#0f172a' } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? 'rgba(59, 130, 246, 0.1)' : 'rgba(37, 99, 235, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#9ca3af' : '#64748b' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderStatistics(stats, analysis) {
+            let html = '';
+            
+            // عرض أهم الإحصائيات للأعمدة الرقمية الأساسية
+            analysis.numericColumns.slice(0, 3).forEach(col => {
+                if (stats[col]) {
+                    const stat = stats[col];
+                    html += `
+                        <div class="stat-box">
+                            <div class="stat-label">متوسط ${col}</div>
+                            <div class="stat-value">${stat.average}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">الأقصى</div>
+                            <div class="stat-value">${stat.max}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">الأدنى</div>
+                            <div class="stat-value">${stat.min}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">الوسيط</div>
+                            <div class="stat-value">${stat.median}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">الانحراف المعياري</div>
+                            <div class="stat-value">${stat.stdDev}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">المجموع</div>
+                            <div class="stat-value">${stat.sum}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            document.getElementById('statsGrid').innerHTML = html;
+        }
+
+        function renderTable(data, columns) {
+            document.getElementById('tableHeader').innerHTML = columns.map(col => `<th>${col}</th>`).join('');
+            const rows = data.slice(0, 50);
+            document.getElementById('tableBody').innerHTML = rows.map(row =>
+                `<tr>${columns.map(col => {
+                    let value = row[col] ?? '-';
+                    if (typeof value === 'number') {
+                        value = formatNumber(value);
+                    }
+                    return `<td>${value}</td>`;
+                }).join('')}</tr>`
+            ).join('');
+        }
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            html2pdf().set({
+                margin: 10,
+                filename: 'dashboard.pdf'
+            }).from(document.querySelector('.dashboard-section')).save();
+        });
+
+        loadDataFromURL();
+    </script>
+</body>
+</html>
