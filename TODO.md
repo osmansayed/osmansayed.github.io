@@ -1,15 +1,14 @@
-# Deploy Local Changes to Live GitHub Pages
+# Fix Mobile Navigation Bar & Circles Alignment
 
-Current status from `git status`:
-- Modified: contact.html, index.html, learning-path.html, projects.html
-- Untracked: TODO.md, TODO-remove-monufia.md
+**Approved Plan Progress:**
+- [x] Step 1: Analyzed code (RTL nav/header-actions/buttons misalignment on mobile).
+- [ ] Step 2: Edit all HTML `<style>` with precise mobile CSS fixes (gap/padding/sizing/RTL).
+- [ ] Step 3: git add/commit/push → Live deploy.
+- [ ] Step 4: Test http://localhost:8000 + https://osmansayed.github.io.
+- [ ] Step 5: Revert option: `git revert HEAD` if needed.
 
-## TODO Steps (from approved plan):
-- [ ] Step 1: git add . (stage all changes/TODOs)
-- [ ] Step 2: git commit -m "Sync modifications: Google Classroom, contact updates, TODOs"
-- [ ] Step 3: git push origin main (deploy to https://osmansayed.github.io)
-- [ ] Step 4: Verify live site (e.g. https://osmansayed.github.io/contact.html)
-- [x] Bonus: Remove "المنوفية" from footers (user confirmed done)
+**Files:** All HTMLs (index, contact, projects, learning-path, etc.).
 
-**Next:** Execute Steps 1-3 to make site live.
+**Step 2 Complete:** Edited contact.html, index.html, projects.html, learning-path.html mobile nav/button CSS (fixed RTL gaps, 40px circles, consistent sizing/alignment).
+**Next:** Edit remaining HTMLs + git push.
 
