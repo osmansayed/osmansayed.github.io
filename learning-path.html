@@ -234,8 +234,47 @@
             .level-content { padding: 16px; }
             .skill-tag { font-size: 0.75rem; padding: 5px 10px; }
         }
-        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
+.classroom-section { 
+    padding: 60px 0; 
+    background: linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(147,51,234,0.08) 100%); 
+    border-radius: 0;
+}
+.featured-classroom { 
+    max-width: 600px; margin: 0 auto; 
+    text-align: center; 
+}
+.classroom-btn { 
+    display: inline-flex; align-items: center; gap: 16px; 
+    background: var(--gradient); color: white; 
+    padding: 20px 48px; font-size: 1.25rem; font-weight: 800; 
+    border-radius: 50px; text-decoration: none; 
+    box-shadow: 0 12px 40px rgba(37,99,235,0.35); 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    font-family: 'Tajawal', sans-serif; 
+    border: 3px solid rgba(255,255,255,0.2); 
+    position: relative; overflow: hidden;
+}
+.classroom-btn::before { 
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); 
+    transition: left 0.6s;
+}
+.classroom-btn:hover { 
+    transform: translateY(-8px) scale(1.03); 
+    box-shadow: 0 25px 60px rgba(37,99,235,0.45); 
+    border-color: rgba(255,255,255,0.4);
+}
+.classroom-btn:hover::before { left: 100%; }
+.classroom-btn i { font-size: 1.6rem; }
+body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(255,255,255,0.1); }
+@media (max-width: 768px) { 
+    .classroom-btn { padding: 18px 36px; font-size: 1.15rem; gap: 12px; } 
+    .classroom-btn i { font-size: 1.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
     </style>
+
 </head>
 <body>
     <div class="bg-pattern"></div>
@@ -287,7 +326,24 @@
         </div>
     </section>
     
+    <section class="classroom-section">
+        <div class="container">
+            <div class="featured-classroom">
+                <div class="section-header">
+                    <span class="section-tag" data-ar="فصلي الدراسي" data-en="My Classroom">فصلي الدراسي</span>
+                    <h2 class="section-title" data-ar="انضم لفصل سيد عثمان" data-en="Join Sayed Osman's Classroom">انضم لفصل سيد عثمان</h2>
+                    <p class="section-subtitle" data-ar="الكورسات والشروحات المباشرة والمحدثة لتحليل البيانات | انقر للوصول الفوري" data-en="Direct and updated courses & tutorials for data analysis | Click for instant access">الكورسات والشروحات المباشرة والمحدثة لتحليل البيانات | انقر للوصول الفوري</p>
+                </div>
+                <a href="https://classroom.google.com/c/ODUxMTY4MzkwMDAw?cjc=i7jfcgjd" target="_blank" rel="noopener noreferrer" class="classroom-btn">
+                    <i class="ph-bold ph-chalkboard-teacher"></i>
+                    <span data-ar="انضم للفصل الدراسي الآن" data-en="Join Classroom Now">انضم للفصل الدراسي الآن</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    
     <section class="roadmap-section">
+
         <div class="container">
             <div class="section-header">
                 <span class="section-tag" data-ar="مسار التعلم" data-en="Learning Path">مسار التعلم</span>
@@ -473,7 +529,7 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-info">📍 <span data-ar="المنوفية، مصر" data-en="Monufia, Egypt">المنوفية، مصر</span> | 📱 01287125205</div>
+<span data-ar="" data-en="Egypt"></span>
                 <div class="footer-links">
                     <a href="https://www.linkedin.com/in/sayed-osman-02578138b" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                     <a href="mailto:osmansayed866@gmail.com" title="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
