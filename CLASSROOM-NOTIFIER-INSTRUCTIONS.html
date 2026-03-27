@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إرشادات إشعارات الكلاس روم التلقائية</title>
+    <style>
+        body { font-family: 'Cairo', sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; line-height: 1.8; background: #f8fafc; }
+        .step { background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .step-number { background: linear-gradient(135deg, #2563eb, #9333ea); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; margin-left: 16px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .code-box { background: #1f2937; color: #e5e7eb; padding: 20px; border-radius: 12px; font-family: monospace; overflow-x: auto; margin: 20px 0; }
+        button { background: linear-gradient(135deg, #2563eb, #9333ea); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        .success { color: #10b981; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📢 إشعارات تلقائية للكلاس روم</h1>
+        <p>لما ترفع مادة → الطلاب ياخدوا إيميل فوري!</p>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">1</span> أنشئ Google Apps Script</h2>
+        <ol>
+            <li>اذهب <a href="https://script.google.com" target="_blank">script.google.com</a></li>
+            <li>اضغط New project</li>
+            <li>احذف الكود القديم</li>
+            <li>انسخ من `classroom-notifier.gs` ← Paste هنا</li>
+            <li>Save → Project name: "Classroom Notifier"</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">2</span> ربط بالكلاس روم</h2>
+        <ol>
+            <li>اذهب classroom.google.com → فصولك → الفصل</li>
+            <li>Settings ⚙️ → Class details → Apps Script</li>
+            <li>Edit project → يفتح الـ Script اللي عملته</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">3</span> شغّل الـ Trigger (السحر ✨)</h2>
+        <ol>
+            <li>Triggers (الساعة 👈)</li>
+            <li>Add Trigger</li>
+            <li>Choose `onCourseWorkCreate`</li>
+            <li>Save → Allow permissions</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2><span class="step-number">4</span> اختبر</h2>
+        <p>في Apps Script → Functions → `testNotification` → Run → شوف الـ Logs ✅</p>
+    </div>
+
+    <div class="step">
+        <h2 class="success"><span class="step-number">5</span> جاهز! 🎉</h2>
+        <p><strong>كل مرة ترفع فيها:</strong><br>
+        • مادة جديدة → Post → Assignment<br>
+        • **تلقائي:** الطلاب ياخدوا إيميل فوري:<br>
+        📧 "تحديث جديد في فصل سيد عثمان: [عنوان المادة]"</p>
+    </div>
+
+    <script>
+        // Copy to clipboard
+        navigator.clipboard.readText().then(() => {
+            alert('انسخ كود classroom-notifier.gs ولصقه في Apps Script!');
+        });
+    </script>
+</body>
+</html>
+
