@@ -16,27 +16,35 @@
             --primary-light: #3b82f6;
             --secondary: #9333ea;
             --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --error: #ef4444;
             --dark: #0f172a;
             --light: #f8fafc;
             --gray: #64748b;
+            --gray-light: #e2e8f0;
             --white: #ffffff;
             --gradient: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
             --gradient-alt: linear-gradient(135deg, #3b82f6 0%, #ec4899 100%);
             --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             --gradient-info: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            --gradient-error: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             --bg-main: linear-gradient(180deg, rgba(37, 99, 235, 0.06) 0%, transparent 30%, transparent 70%, rgba(147, 51, 234, 0.06) 100%), #f0f4f8;
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-secondary: #64748b;
+            --text-muted: #9ca3af;
             --border-color: #e2e8f0;
         }
         body.dark-mode {
-            --bg-main: linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, transparent 30%, transparent 70%, rgba(147, 51, 234, 0.08) 100%), #0a0f1a;
-            --card-bg: #020617;
-            --text-main: #e5e7eb;
-            --text-secondary: #9ca3af;
-            --border-color: #1f2937;
+            --bg-main: linear-gradient(180deg, rgba(37, 99, 235, 0.12) 0%, transparent 30%, transparent 70%, rgba(147, 51, 234, 0.12) 100%), #0a0f1a;
+            --card-bg: #111827;
+            --text-main: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-muted: #6b7280;
+            --border-color: #374151;
         }
         body { font-family: 'Cairo', sans-serif; background: var(--bg-main); color: var(--text-main); line-height: 1.6; overflow-x: hidden; min-height: 100vh; transition: background 0.3s, color 0.3s; }
         
@@ -46,22 +54,27 @@
         .shape-2 { width: 200px; height: 200px; border: 3px solid #9333ea; border-radius: 12px; top: 45%; left: -60px; transform: rotate(-12deg); }
         .shape-3 { width: 140px; height: 140px; background: var(--gradient); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; bottom: 15%; right: 8%; opacity: 0.18; }
         @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.15; } 25% { transform: translate(20px, -20px) rotate(5deg); opacity: 0.2; } 50% { transform: translate(-10px, 20px) rotate(-5deg); opacity: 0.15; } 75% { transform: translate(15px, 10px) rotate(3deg); opacity: 0.18; } }
+        @keyframes floatSmooth { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        @keyframes floatSmooth { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
         .grid-bg {
             background-image: linear-gradient(rgba(37, 99, 235, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 99, 235, 0.07) 1px, transparent 1px);
             background-size: 48px 48px;
             animation: gridMove 50s linear infinite;
         }
         body.dark-mode .grid-bg {
-            background-image: linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
         }
         @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(60px, 60px); } }
         @keyframes cardFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-30px); } 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { 0% { opacity: 0; transform: translateX(30px); } 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.5); } 50% { box-shadow: 0 0 40px rgba(37, 99, 235, 0.8); } }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
         @supports (padding: max(0px)) { .container { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); } }
         
-        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 12px 0; padding-top: max(12px, env(safe-area-inset-top)); background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 4px 35px rgba(37, 99, 235, 0.12); border-bottom: 1px solid rgba(37, 99, 235, 0.1); transition: all 0.3s ease; }
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 12px 0; padding-top: max(12px, env(safe-area-inset-top)); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px) saturate(180%); box-shadow: 0 4px 35px rgba(37, 99, 235, 0.12); border-bottom: 2px solid rgba(37, 99, 235, 0.15); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         header.scrolled { padding: 10px 0; padding-top: max(10px, env(safe-area-inset-top)); background: rgba(255, 255, 255, 0.95); box-shadow: 0 6px 40px rgba(37, 99, 235, 0.15); }
         body.dark-mode header { background: rgba(15, 23, 42, 0.92); }
         body.dark-mode header.scrolled { background: rgba(15, 23, 42, 0.95); }
@@ -69,9 +82,10 @@
         nav { display: flex; justify-content: space-between; align-items: center; padding: 0; background: transparent; border: none; box-shadow: none; gap: 16px; flex-wrap: wrap; }
         body.dark-mode nav { background: transparent; border: none; }
         
-        .logo { font-family: 'Tajawal', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; transition: all 0.3s ease; }
-        .logo:hover { color: var(--primary); transform: scale(1.02); }
-        .logo-icon { width: 42px; height: 42px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
+        .logo { font-family: 'Tajawal', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .logo:hover { color: var(--primary); transform: scale(1.05) translateY(-2px); }
+        .logo-icon { width: 42px; height: 42px; background: var(--gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); transition: all 0.3s ease; }
+        .logo:hover .logo-icon { transform: scale(1.1) rotateY(360deg); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6); }
         
         .nav-links { display: flex; gap: 8px; background: rgba(255,255,255,0.92); padding: 8px; border-radius: 26px; border: 1.5px solid rgba(37,99,235,0.2); box-shadow: 0 4px 15px rgba(37,99,235,0.1); transition: all 0.3s ease; }
         .nav-links:hover { border-color: rgba(37,99,235,0.4); }
@@ -85,10 +99,10 @@
         .nav-links a span { position: relative; z-index: 1; }
         
         .header-actions { display: flex; align-items: center; gap: 10px; }
-        .theme-btn, .lang-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-light); background: var(--white); color: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; box-shadow: 0 2px 10px rgba(37, 99, 235, 0.15); }
-        .theme-btn::before, .lang-btn::before { content: ''; position: absolute; inset: 0; background: var(--gradient); opacity: 0; transition: opacity 0.3s ease; z-index: 0; }
+        .theme-btn, .lang-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-light); background: var(--white); color: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
+        .theme-btn::before, .lang-btn::before { content: ''; position: absolute; inset: 0; background: var(--gradient); opacity: 0; transition: opacity 0.4s ease; z-index: 0; }
         .theme-btn:hover::before, .lang-btn:hover::before { opacity: 1; }
-        .theme-btn:hover, .lang-btn:hover { color: var(--white); border-color: transparent; transform: scale(1.15) rotate(10deg); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3); }
+        .theme-btn:hover, .lang-btn:hover { color: var(--white); border-color: transparent; transform: scale(1.2) rotate(12deg); box-shadow: 0 10px 35px rgba(37, 99, 235, 0.4); }
         .theme-btn i, .lang-btn span { position: relative; z-index: 1; }
         body.dark-mode .theme-btn, body.dark-mode .lang-btn { background: rgba(37, 99, 235, 0.15); color: var(--primary-light); border-color: var(--primary-light); }
         
@@ -112,7 +126,7 @@
         /* Hero Section */
         .hero { min-height: 60vh; display: flex; align-items: center; justify-content: center; padding: 120px 0 60px; text-align: center; }
         .hero-content { max-width: 800px; margin: 0 auto; opacity: 0; transform: translateY(18px); animation: cardFadeUp 0.8s ease forwards; }
-        .hero-icon { width: 100px; height: 100px; margin: 0 auto 24px; background: var(--gradient); border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white; box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4); animation: pulse 3s ease-in-out infinite; }
+        .hero-icon { width: 120px; height: 120px; margin: 0 auto 24px; background: var(--gradient); border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; box-shadow: 0 15px 50px rgba(37, 99, 235, 0.5); animation: pulse 3s ease-in-out infinite, floatSmooth 4s ease-in-out infinite; transition: all 0.3s ease; }
         .hero-title { font-family: 'Tajawal', sans-serif; font-size: 2.8rem; font-weight: 800; margin-bottom: 16px; color: var(--text-main); line-height: 1.3; }
         .hero-title span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .hero-desc { color: var(--text-secondary); font-size: 1.15rem; line-height: 1.8; margin-bottom: 20px; }
@@ -131,8 +145,8 @@
         .roadmap-level:nth-child(odd) { flex-direction: row; }
         .roadmap-level:nth-child(even) { flex-direction: row-reverse; }
         
-        .level-content { width: 45%; padding: 28px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: 0 8px 30px rgba(37, 99, 235, 0.1); transition: all 0.4s ease; opacity: 0; transform: translateY(20px); animation: cardFadeUp 0.7s ease forwards; }
-        .level-content:hover { transform: translateY(-8px); box-shadow: 0 16px 50px rgba(37, 99, 235, 0.2); border-color: var(--primary-light); }
+        .level-content { width: 45%; padding: 28px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 20px; box-shadow: 0 10px 40px rgba(37, 99, 235, 0.12); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; transform: translateY(20px); animation: cardFadeUp 0.7s ease forwards; }
+        .level-content:hover { transform: translateY(-12px); box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3); border-color: var(--primary-light); background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(147, 51, 234, 0.05)); }
         
         .level-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 14px; }
         .level-badge.beginner { background: linear-gradient(135deg, #10b981, #059669); color: white; }
@@ -152,14 +166,15 @@
         .resources-section { padding: 60px 0 80px; }
         .resources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
         
-        .resource-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 28px; transition: all 0.4s ease; opacity: 0; transform: translateY(20px); animation: cardFadeUp 0.7s ease forwards; box-shadow: 0 6px 24px rgba(37, 99, 235, 0.08); }
+        .resource-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 20px; padding: 28px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; transform: translateY(20px); animation: cardFadeUp 0.7s ease forwards; box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12); }
+        .resource-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(37, 99, 235, 0.25); border-color: var(--primary-light); background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(147, 51, 234, 0.05)); }
         .resource-card:nth-child(1) { animation-delay: 0.1s; }
         .resource-card:nth-child(2) { animation-delay: 0.2s; }
         .resource-card:nth-child(3) { animation-delay: 0.3s; }
         .resource-card:nth-child(4) { animation-delay: 0.4s; }
-        .resource-card:hover { transform: translateY(-8px); box-shadow: 0 16px 50px rgba(37, 99, 235, 0.18); border-color: var(--primary-light); }
         
-        .resource-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 18px; }
+        .resource-icon { width: 70px; height: 70px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 18px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+        .resource-card:hover .resource-icon { transform: scale(1.15) rotateY(360deg); }
         .resource-icon.courses { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
         .resource-icon.books { background: linear-gradient(135deg, #9333ea, #7c3aed); color: white; }
         .resource-icon.tools { background: linear-gradient(135deg, #10b981, #059669); color: white; }
@@ -174,7 +189,8 @@
         .tips-section { padding: 60px 0 80px; }
         .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
         
-        .tip-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 24px; transition: all 0.3s ease; opacity: 0; transform: translateY(20px); animation: cardFadeUp 0.7s ease forwards; }
+        .tip-card { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 18px; padding: 24px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; transform: translateY(20px); animation: cardFadeUp 0.7s ease forwards; }
+        .tip-card:hover { transform: translateY(-6px); border-color: var(--primary-light); box-shadow: 0 12px 40px rgba(37, 99, 235, 0.18); background: linear-gradient(135deg, rgba(37, 99, 235, 0.02), rgba(147, 51, 234, 0.02)); }
         .tip-card:nth-child(1) { animation-delay: 0.1s; }
         .tip-card:nth-child(2) { animation-delay: 0.15s; }
         .tip-card:nth-child(3) { animation-delay: 0.2s; }
@@ -183,7 +199,8 @@
         .tip-card:nth-child(6) { animation-delay: 0.35s; }
         .tip-card:hover { transform: translateY(-5px); border-color: var(--primary-light); box-shadow: 0 12px 35px rgba(37, 99, 235, 0.15); }
         
-        .tip-number { width: 36px; height: 36px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1rem; margin-bottom: 14px; }
+        .tip-number { width: 45px; height: 45px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.2rem; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); transition: all 0.3s ease; }
+        .tip-card:hover .tip-number { transform: scale(1.15); box-shadow: 0 10px 30px rgba(37, 99, 235, 0.6); }
         .tip-title { font-family: 'Tajawal', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
         .tip-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
         
@@ -250,26 +267,37 @@
 .classroom-btn { 
     display: inline-flex; align-items: center; gap: 16px; 
     background: var(--gradient); color: white; 
-    padding: 20px 48px; font-size: 1.25rem; font-weight: 800; 
-    border-radius: 50px; text-decoration: none; 
-    box-shadow: 0 12px 40px rgba(37,99,235,0.35); 
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    padding: 22px 52px; font-size: 1.3rem; font-weight: 800; 
+    border-radius: 60px; text-decoration: none; 
+    box-shadow: 0 15px 50px rgba(37,99,235,0.4); 
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     font-family: 'Tajawal', sans-serif; 
-    border: 3px solid rgba(255,255,255,0.2); 
+    border: 3px solid rgba(255,255,255,0.25); 
     position: relative; overflow: hidden;
+    letter-spacing: 0.5px;
 }
 .classroom-btn::before { 
     content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); 
-    transition: left 0.6s;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); 
+    transition: left 0.7s;
+}
+.classroom-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 .classroom-btn:hover { 
-    transform: translateY(-8px) scale(1.03); 
-    box-shadow: 0 25px 60px rgba(37,99,235,0.45); 
-    border-color: rgba(255,255,255,0.4);
+    transform: translateY(-12px) scale(1.05); 
+    box-shadow: 0 30px 70px rgba(37,99,235,0.6); 
+    border-color: rgba(255,255,255,0.5);
 }
 .classroom-btn:hover::before { left: 100%; }
-.classroom-btn i { font-size: 1.6rem; }
+.classroom-btn:hover::after { opacity: 1; }
+.classroom-btn i { font-size: 1.8rem; transition: all 0.3s ease; }
+.classroom-btn:hover i { transform: scale(1.2) rotate(10deg); }
 body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(255,255,255,0.1); }
 @media (max-width: 768px) { 
     .classroom-btn { padding: 18px 36px; font-size: 1.15rem; gap: 12px; } 
@@ -426,11 +454,11 @@ body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(
                     </div>
                     <h3 class="resource-title" data-ar="الدورات التعليمية" data-en="Online Courses">الدورات التعليمية</h3>
                     <ul class="resource-list">
-                        <li data-ar="Coursera - Data Science Specialization" data-en="Coursera - Data Science Specialization">Coursera - Data Science Specialization</li>
-                        <li data-ar="edX - MicroMasters in Statistics" data-en="edX - MicroMasters in Statistics">edX - MicroMasters in Statistics</li>
-                        <li data-ar="Udemy - Complete Data Analyst" data-en="Udemy - Complete Data Analyst">Udemy - Complete Data Analyst</li>
-                        <li data-ar="Kaggle - Python Courses" data-en="Kaggle - Python Courses">Kaggle - Python Courses</li>
-                        <li data-ar="DataCamp - Data Analyst Path" data-en="DataCamp - Data Analyst Path">DataCamp - Data Analyst Path</li>
+                        <li data-ar="Google Analytics Academy - شهادات مجانية من جوجل" data-en="Google Analytics Academy - Free certifications from Google">Google Analytics Academy - شهادات مجانية من جوجل</li>
+                        <li data-ar="Coursera - Data Analysis & Python for Everyone" data-en="Coursera - Data Analysis & Python for Everyone">Coursera - Data Analysis & Python for Everyone</li>
+                        <li data-ar="Kaggle Learn - دورات مختصرة وعملية مجانية" data-en="Kaggle Learn - Free concise & practical courses">Kaggle Learn - دورات مختصرة وعملية مجانية</li>
+                        <li data-ar="DataCamp - مسارات معتمدة لمحللي البيانات" data-en="DataCamp - Certified Data Analyst paths">DataCamp - مسارات معتمدة لمحللي البيانات</li>
+                        <li data-ar="LinkedIn Learning - شهادات مهنية معترف بها" data-en="LinkedIn Learning - Recognized professional certificates">LinkedIn Learning - شهادات مهنية معترف بها</li>
                     </ul>
                 </div>
                 
@@ -441,11 +469,11 @@ body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(
                     </div>
                     <h3 class="resource-title" data-ar="الكتب الأساسية" data-en="Essential Books">الكتب الأساسية</h3>
                     <ul class="resource-list">
-                        <li data-ar="Python for Data Analysis - Wes McKinney" data-en="Python for Data Analysis - Wes McKinney">Python for Data Analysis - Wes McKinney</li>
-                        <li data-ar="The Data Warehouse Toolkit" data-en="The Data Warehouse Toolkit">The Data Warehouse Toolkit</li>
-                        <li data-ar="Statistical Inference" data-en="Statistical Inference">Statistical Inference</li>
-                        <li data-ar="Storytelling with Data" data-en="Storytelling with Data">Storytelling with Data</li>
-                        <li data-ar="Business Analytics" data-en="Business Analytics">Business Analytics</li>
+                        <li data-ar="Python for Data Analysis - من الصفر لاحتراف" data-en="Python for Data Analysis - Master from zero">Python for Data Analysis - من الصفر لاحتراف</li>
+                        <li data-ar="Storytelling with Data - فن عرض النتائج" data-en="Storytelling with Data - Art of presenting results">Storytelling with Data - فن عرض النتائج</li>
+                        <li data-ar="Fundamentals of Data Visualization" data-en="Fundamentals of Data Visualization">Fundamentals of Data Visualization</li>
+                        <li data-ar="SQL: The Definitive Guide - إتقان الـ SQL" data-en="SQL: The Definitive Guide - Master SQL">SQL: The Definitive Guide - إتقان الـ SQL</li>
+                        <li data-ar="Power BI Desktop - الدليل العملي الكامل" data-en="Power BI Desktop - Complete practical guide">Power BI Desktop - الدليل العملي الكامل</li>
                     </ul>
                 </div>
                 
@@ -456,11 +484,11 @@ body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(
                     </div>
                     <h3 class="resource-title" data-ar="الأدوات التقنية" data-en="Technical Tools">الأدوات التقنية</h3>
                     <ul class="resource-list">
-                        <li data-ar="Microsoft Excel - الجداول والمخططات" data-en="Microsoft Excel - Tables & Charts">Microsoft Excel - الجداول والمخططات</li>
-                        <li data-ar="SQL Server / MySQL" data-en="SQL Server / MySQL">SQL Server / MySQL</li>
-                        <li data-ar="Power BI - لوحات المعلومات" data-en="Power BI - Dashboards">Power BI - لوحات المعلومات</li>
-                        <li data-ar="Tableau - تصور البيانات" data-en="Tableau - Data Visualization">Tableau - تصور البيانات</li>
-                        <li data-ar="Python & R - التحليل الإحصائي" data-en="Python & R - Statistical Analysis">Python & R - التحليل الإحصائي</li>
+                        <li data-ar="Microsoft Excel - تحليل البيانات والرسوم البيانية" data-en="Microsoft Excel - Data analysis and charts">Microsoft Excel - تحليل البيانات والرسوم البيانية</li>
+                        <li data-ar="SQL & Databases - أساس تحليل البيانات الضخمة" data-en="SQL & Databases - Foundation for big data">SQL & Databases - أساس تحليل البيانات الضخمة</li>
+                        <li data-ar="Power BI - لوحات معلومات احترافية وديناميكية" data-en="Power BI - Professional dynamic dashboards">Power BI - لوحات معلومات احترافية وديناميكية</li>
+                        <li data-ar="Python - التحليل المتقدم والذكاء الاصطناعي" data-en="Python - Advanced analysis and AI">Python - التحليل المتقدم والذكاء الاصطناعي</li>
+                        <li data-ar="Google Sheets & Looker Studio - تحليل مجاني فعال" data-en="Google Sheets & Looker Studio - Free effective analysis">Google Sheets & Looker Studio - تحليل مجاني فعال</li>
                     </ul>
                 </div>
                 
@@ -471,11 +499,11 @@ body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(
                     </div>
                     <h3 class="resource-title" data-ar="المجتمعات والمنتديات" data-en="Communities & Forums">المجتمعات والمنتديات</h3>
                     <ul class="resource-list">
-                        <li data-ar="Kaggle Community" data-en="Kaggle Community">Kaggle Community</li>
-                        <li data-ar="Reddit - r/dataanalysis" data-en="Reddit - r/dataanalysis">Reddit - r/dataanalysis</li>
-                        <li data-ar="LinkedIn Groups" data-en="LinkedIn Groups">LinkedIn Groups</li>
-                        <li data-ar="Stack Overflow" data-en="Stack Overflow">Stack Overflow</li>
-                        <li data-ar="Data Science Central" data-en="Data Science Central">Data Science Central</li>
+                        <li data-ar="Kaggle Community - حل تحديات وشارك المشاريع" data-en="Kaggle Community - Solve challenges">Kaggle Community - حل تحديات وشارك المشاريع</li>
+                        <li data-ar="Reddit r/dataanalysis - مناقشات يومية عملية" data-en="Reddit r/dataanalysis - Practical daily discussions">Reddit r/dataanalysis - مناقشات يومية عملية</li>
+                        <li data-ar="LinkedIn Data Analyst Groups - توظيف وفرص وظيفية" data-en="LinkedIn Groups - Job opportunities">LinkedIn Data Analyst Groups - توظيف وفرص وظيفية</li>
+                        <li data-ar="Stack Overflow - حل المشاكل التقنية" data-en="Stack Overflow - Solve technical problems">Stack Overflow - حل المشاكل التقنية</li>
+                        <li data-ar="بودكاست Data Stories - استلهام من خبراء" data-en="Data Stories Podcast - Insights from experts">بودكاست Data Stories - استلهام من خبراء</li>
                     </ul>
                 </div>
             </div>
@@ -493,38 +521,38 @@ body.dark-mode .classroom-btn { background: var(--gradient); border-color: rgba(
             <div class="tips-grid">
                 <div class="tip-card">
                     <div class="tip-number">1</div>
-                    <h4 class="tip-title" data-ar="تدرب باستمرار" data-en="Practice Consistently">تدرب باستمرار</h4>
-                    <p class="tip-desc" data-ar="التحليل يحتاج ممارسة مستمرة. حل تمارين يومية واعمل على مشاريع عملية صغيرة." data-en="Analysis requires consistent practice. Solve daily exercises and work on small practical projects.">التحليل يحتاج ممارسة مستمرة. حل تمارين يومية واعمل على مشاريع عملية صغيرة.</p>
+                    <h4 class="tip-title" data-ar="تدرب على بيانات حقيقية" data-en="Practice with Real Data">تدرب على بيانات حقيقية</h4>
+                    <p class="tip-desc" data-ar="لا تكتفِ بالتمارين النظرية. حمّل مجموعات بيانات من Kaggle وحلل مشاكل فعلية، هذا ما يطلبه أصحاب العمل." data-en="Don't settle for theory. Download datasets from Kaggle and solve real problems. This is what employers want.">لا تكتفِ بالتمارين النظرية. حمّل مجموعات بيانات من Kaggle وحلل مشاكل فعلية، هذا ما يطلبه أصحاب العمل.</p>
                 </div>
                 
                 <div class="tip-card">
                     <div class="tip-number">2</div>
-                    <h4 class="tip-title" data-ar="تعلم من البيانات الحقيقية" data-en="Learn from Real Data">تعلم من البيانات الحقيقية</h4>
-                    <p class="tip-desc" data-ar="لا تكتفي بالتمارين النظرية. حمل مجموعات بيانات حقيقية من Kaggle و UNICEF وعالجها." data-en="Don't settle for theoretical exercises. Download real datasets from Kaggle and UNICEF and work on them.">لا تكتفي بالتمارين النظرية. حمل مجموعات بيانات حقيقية من Kaggle و UNICEF وعالجها.</p>
+                    <h4 class="tip-title" data-ar="أتقِن أداة واحدة أولاً" data-en="Master One Tool First">أتقِن أداة واحدة أولاً</h4>
+                    <p class="tip-desc" data-ar="بدلاً من تعلم كل الأدوات مرة واحدة، ركّز على Excel أو SQL أو Power BI حتى تحترفها، ثم وسّع مهاراتك تدريجياً." data-en="Instead of learning everything at once, focus on Excel, SQL, or Power BI until you master it, then expand gradually.">بدلاً من تعلم كل الأدوات مرة واحدة، ركّز على Excel أو SQL أو Power BI حتى تحترفها، ثم وسّع مهاراتك تدريجياً.</p>
                 </div>
                 
                 <div class="tip-card">
                     <div class="tip-number">3</div>
-                    <h4 class="tip-title" data-ar="أتقن أداة واحدة" data-en="Master One Tool">أتقن أداة واحدة</h4>
-                    <p class="tip-desc" data-ar="بدلاً من تجربة كل شيء، أتقن أداة واحدة مثل Power BI أو Tableau ثم وسّع نطاق مهاراتك." data-en="Instead of trying everything, master one tool like Power BI or Tableau, then expand your skills.">بدلاً من تجربة كل شيء، أتقن أداة واحدة مثل Power BI أو Tableau ثم وسّع نطاق مهاراتك.</p>
+                    <h4 class="tip-title" data-ar="افهم السياق التجاري" data-en="Understand Business Context">افهم السياق التجاري</h4>
+                    <p class="tip-desc" data-ar="التحليل الحقيقي ليس عن الأرقام فقط. تعلم كيف تربط البيانات بأهداف العمل وتقدم رؤى قابلة للتنفيذ تحل مشاكل حقيقية." data-en="Real analysis isn't just numbers. Learn how to link data to business goals and provide actionable insights.">التحليل الحقيقي ليس عن الأرقام فقط. تعلم كيف تربط البيانات بأهداف العمل وتقدم رؤى قابلة للتنفيذ تحل مشاكل حقيقية.</p>
                 </div>
                 
                 <div class="tip-card">
                     <div class="tip-number">4</div>
-                    <h4 class="tip-title" data-ar="اربط التحليل بالأعمال" data-en="Link Analysis to Business">اربط التحليل بالأعمال</h4>
-                    <p class="tip-desc" data-ar="تعلم كيف تقدم رؤى قابلة للتنفيذ تحل مشاكل الأعمال الحقيقية وليست مجرد أرقام." data-en="Learn how to present actionable insights that solve real business problems, not just numbers.">تعلم كيف تقدم رؤى قابلة للتنفيذ تحل مشاكل الأعمال الحقيقية وليست مجرد أرقام.</p>
+                    <h4 class="tip-title" data-ar="الاتصال والعرض مهاراتٌ أساسية" data-en="Communication is Essential">الاتصال والعرض مهاراتٌ أساسية</h4>
+                    <p class="tip-desc" data-ar="تحسين مهارات العرض والحكي القصصي للبيانات مهمة مثل التحليل نفسه. تعلم كيف تشرح النتائج لجمهور غير تقني بوضوح." data-en="Storytelling and presentation skills are as important as analysis. Learn to explain results clearly to non-technical audiences.">تحسين مهارات العرض والحكي القصصي للبيانات مهمة مثل التحليل نفسه. تعلم كيف تشرح النتائج لجمهور غير تقني بوضوح.</p>
                 </div>
                 
                 <div class="tip-card">
                     <div class="tip-number">5</div>
                     <h4 class="tip-title" data-ar="وثّق عملك" data-en="Document Your Work">وثّق عملك</h4>
-                    <p class="tip-desc" data-ar="أنشئ ملف GitHub展示了 مشاريعك وشاركها. التوثيق يوضح مستوى احترافك." data-en="Create a GitHub portfolio showcasing your projects. Documentation shows your professionalism.">أنشئ ملف GitHub展示了 مشاريعك وشاركها. التوثيق يوضح مستوى احترافك.</p>
+                    <p class="tip-desc" data-ar="أنشئ ملف GitHub لعرض مشاريعك وشاركها. التوثيق الجيد يوضح مستوى احترافك أمام أصحاب العمل." data-en="Create a GitHub portfolio showcasing your projects. Good documentation demonstrates your professionalism to employers.">أنشئ ملف GitHub لعرض مشاريعك وشاركها. التوثيق الجيد يوضح مستوى احترافك أمام أصحاب العمل.</p>
                 </div>
                 
                 <div class="tip-card">
                     <div class="tip-number">6</div>
-                    <h4 class="tip-title" data-ar="تواصل مع المجتمع" data-en="Connect with Community">تواصل مع المجتمع</h4>
-                    <p class="tip-desc" data-ar="انضم لمجتمعات المحللين على LinkedIn وشارك في المسابقات. التواصل يفتح أبواب الفرص." data-en="Join analyst communities on LinkedIn and participate in competitions. Networking opens doors to opportunities.">انضم لمجتمعات المحللين على LinkedIn وشارك في المسابقات. التواصل يفتح أبواب الفرص.</p>
+                    <h4 class="tip-title" data-ar="شارك عملك وابنِ سمعتك" data-en="Build Your Portfolio">شارك عملك وابنِ سمعتك</h4>
+                    <p class="tip-desc" data-ar="انشر مشاريعك على GitHub وLinkedIn وSharedIt. المحافظ القوية تفتح أبواب وظائف أفضل من درجات الاختبارات." data-en="Publish projects on GitHub and LinkedIn. Strong portfolios open better job doors than exam scores.">انشر مشاريعك على GitHub وLinkedIn وSharedIt. المحافظ القوية تفتح أبواب وظائف أفضل من درجات الاختبارات.</p>
                 </div>
             </div>
         </div>
